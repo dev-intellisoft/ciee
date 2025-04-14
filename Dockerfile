@@ -1,12 +1,16 @@
 # frontend/Dockerfile
 FROM node:18-alpine AS build
-WORKDIR /app
+WORKDIR /zoo-animal-manager-system
 
 COPY package*.json ./
 RUN npm install
 
 COPY . .
 RUN npm run build
+
+FROM nginx:alpine AS nginx
+COPY --from=final /usr/share/nginx/html /usr/share/nginx/html
+EXPOSE 80
 
 
 # Stage 1: Build the application
