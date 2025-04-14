@@ -1,10 +1,22 @@
+# frontend/Dockerfile
+FROM node:18-alpine AS build
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+RUN npm run build
+
+
 # Stage 1: Build the application
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 5000
 
 # Stage 2: Publish the application
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 COPY ["ZooApi/ZooApi.csproj", "ZooApi/"]
 RUN dotnet restore "ZooApi/ZooApi.csproj"
@@ -16,4 +28,8 @@ RUN dotnet publish "ZooApi.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
+#ENTRYPOINT ["dotnet", "ZooApi.dll"]
+
+#ENTRYPOINT ["dotnet", "ZooApi"]
+
 ENTRYPOINT ["dotnet", "ZooApi.dll"]

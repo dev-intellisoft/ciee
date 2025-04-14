@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
 builder.Services.AddDbContext<ZooContext>(options =>
-    options.UseSqlServer("Server=localhost,1433;Database=ZooDb;User Id=sa;Password=YourStrong@Password123;TrustServerCertificate=true;"));
+    options.UseSqlServer("Server=sqlserver,1433;Database=ZooDb;User Id=sa;Password=YourStrong@Password123;TrustServerCertificate=true;"));
 
 builder.Services.AddScoped<AnimalService>();
 builder.Services.AddScoped<CareService>();
