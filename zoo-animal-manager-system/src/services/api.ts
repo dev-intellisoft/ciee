@@ -1,5 +1,5 @@
 
-const baseUrl = 'http://localhost:5246'
+const baseUrl = 'http://localhost:8084'
 export class ApiService {
 
   static async get<T>(endpoint: string): Promise<T> {
