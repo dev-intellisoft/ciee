@@ -18,18 +18,18 @@ public class CareController: ControllerBase
     }
 
     [HttpGet(Name = "GetCares")]
-    public async Task<ActionResult<IEnumerable<Care>>> Get() 
+    public async Task<ActionResult<IEnumerable<Care>>> Get()
     {
         var cares = await _service.GetAllCaresAsync();
         if (cares == null || cares.Count == 0)
         {
-            return NotFound();
+            return Ok(new List<Care>());
         }
         return Ok(cares);
     }
 
     [HttpGet("{id}", Name = "GetCare")]
-    public async Task<ActionResult<Care>> Get(int id) 
+    public async Task<ActionResult<Care>> Get(int id)
     {
         var care = await _service.GetCareByIdAsync(id);
         if (care == null)
@@ -39,7 +39,7 @@ public class CareController: ControllerBase
         return Ok(care);
     }
     [HttpPost(Name = "PostCare")]
-    public async Task<ActionResult<Care>> Post([FromBody] Care care) 
+    public async Task<ActionResult<Care>> Post([FromBody] Care care)
     {
         if (care == null)
         {
@@ -63,7 +63,7 @@ public class CareController: ControllerBase
     }
 
     [HttpPut("{id}", Name = "PutCare")]
-    public async Task<ActionResult<Care>> Put(int id, [FromBody] Care updatedCare) 
+    public async Task<ActionResult<Care>> Put(int id, [FromBody] Care updatedCare)
     {
         // var existingCare = await _context.Cares.FindAsync(id);
 
@@ -76,14 +76,14 @@ public class CareController: ControllerBase
     }
 
     [HttpDelete("{id}", Name = "DeleteCare")]
-    public async Task<ActionResult<Care>> Delete(int id) 
+    public async Task<ActionResult<Care>> Delete(int id)
     {
         var care = await _service.DeleteCareAsync(id);
         if (care == null)
         {
             return NotFound();
         }
-    
+
         return Ok(care);
     }
 }

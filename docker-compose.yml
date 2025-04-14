@@ -3,6 +3,7 @@ version: '3.8'
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    platform: linux/amd64
     container_name: sqlserver
     environment:
       SA_PASSWORD: "YourStrong@Password123"
@@ -18,20 +19,23 @@ services:
       - sqlserver
     volumes:
       - ./init.sql:/init.sql
-    entrypoint: >
-      /bin/bash -c "
-      sleep 20;
-      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'YourStrong@Password123' -i /init.sql;
-      echo 'Database initialized';
-      "
+#    entrypoint:
+#    entrypoint: >
+#      bash -c "dotnet tool install --global dotnet-ef &&
+#             export PATH=\"$PATH:/root/.dotnet/tools\" &&
+#              dotnet ef migrations add InitialCreate &&
+#             dotnet ef database update &&
+#             dotnet ZooApi.dll"
   zoo-api:
     build:
-      context: ./  # Path to your .NET project folder
-      dockerfile: Dockerfile  # Specify the Dockerfile if it's not named 'Dockerfile'
+      context: ./
+      dockerfile: Dockerfile
+    platform: linux/amd64
     depends_on:
       - sqlserver
     environment:
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=your_db_name;User Id=sa;Password=YourStrong@Password123;
+      - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "8084:8080"  # Change port if necessary
   frontend:

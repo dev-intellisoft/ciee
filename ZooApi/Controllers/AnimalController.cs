@@ -23,7 +23,7 @@ public class AnimalController: ControllerBase
 
         if (animals == null || animals.Count == 0)
         {
-            return NotFound();
+            return new List<Animal>();
         }
 
         return Ok(animals);
