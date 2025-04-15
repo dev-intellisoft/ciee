@@ -1,0 +1,17 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+COPY . .
+
+WORKDIR /src/ZooApi
+RUN dotnet restore
+
+RUN dotnet publish "ZooApi.csproj" -c Release -r linux-x64 -o /app/publish --no-self-contained
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+ENTRYPOINT ["dotnet", "ZooApi.dll"]
+EXPOSE 8080
