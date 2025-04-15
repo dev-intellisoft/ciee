@@ -27,23 +27,15 @@ services:
       sleep 20 && 
       /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P 'YourStrong@Password123' -i /init.sql &&
       tail -f /dev/null"
-#    entrypoint:
-#    entrypoint: >
-#      bash -c "dotnet tool install --global dotnet-ef &&
-#             export PATH=\"$PATH:/root/.dotnet/tools\" &&
-#              dotnet ef migrations add InitialCreate &&
-#             dotnet ef database update &&
-#             dotnet ZooApi.dll"
   zoo-api:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.backend
     platform: linux/amd64
     depends_on:
       - sqlserver
     environment:
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=your_db_name;User Id=sa;Password=YourStrong@Password123;
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=ZooDb;User Id=sa;Password=YourStrong@Password123;TrustServerCertificate=true;
     ports:
       - "8084:8080"
     networks:
